@@ -1,12 +1,24 @@
-fork from 
+> fork from [GitHub - pairlab/leibnizgym](https://github.com/pairlab/leibnizgym)
+
 # IsaacGym版本的Trifinger安装
+理论上任何Ubuntu版本都可以安装, 已在Ubuntu20.04和24.04上进行测试.
+
 IsaacGym中的仿真环境为[GitHub - leibnizgym](https://github.com/pairlab/leibnizgym), 需要用较低版本的[IsaacGym](https://github.com/jmcoholich/isaacgym), 故安装流程如下:
 1. 安装isaacgym: `git clone https://github.com/jmcoholich/isaacgym.git`, 按照其中的方法安装IsaacGym, 注意不要安装rl_games版本过低了, 安装完成后可以测试下是否可以gui渲染, 需要将readme下文中注意事项完成, 即添加路径`export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CONDA_PREFIX/lib` (也就是`/path/to/mambaforge/envs/rlgpu/lib`文件夹), 让gym能找到动态链接库文件, 一个更好的方法是在`/path/to/mambaforge/envs/rlgpu/etc/conda/activate.d`文件夹下添加一个`*.sh`文件, 里面写上这条命令, 这样就可以启动环境时候自动添加路径了.
-2. 安装leibnizgym: `git clone https://github.com/pairlab/leibnizgym.git`进入文件夹后`pip install -e .`
+2. 安装leibnizgym: 本仓库包含leibnigym内容, `git clone https://github.com/wty-yy/trifinger-gym.git`进入文件夹后`pip install -e .`
 3. 安装1.6.0版本的rl_games: (1.6.1以后的版本需要torch>=2.x) `git clone --branch v1.6.0 --single-branch https://github.com/Denys88/rl_games.git`, 进入文件夹后用`pip install -e .`安装
 > 顺序2,3不能颠倒, 因为ieleibnizgym会下载最新版的rl_games, 所以要再降级才能使用
 4. (报错`error: invalid value for –gpu-architecture (-arch)`) 需要安装1.13.1版本的pytorch: `conda install pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cuda=11.7 -c pytorch -c nvidia`
 
+```bash
+# 测试可否运行
+python scripts/rlg_hydra.py  # 本项目中已包含了sac和ppo的模型权重
+```
+
+运行效果如下图所示
+![sac evaluate](./assets/trifinger.gif)
+
+# 环境使用方法
 环境继承关系：IsaacEnvBase -> TrifingerEnv  传入-> VecTaskPython
 
 env_base.py 中 IsaacEnvBase.step 函数
@@ -30,3 +42,6 @@ isaac gym
 
 - urdf文件：resources/assets/trifinger/robot_properties_fingers/urdf/edu/trifingeredu.urdf,
 - 网格文件：resources/assets/trifinger/robot_properties_fingers/meshes/...
+
+# 致谢
+[@wqqqqqqw](https://github.com/wqqqqqqw)
